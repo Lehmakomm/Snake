@@ -13,6 +13,7 @@ public interface IDrawable extends Serializable {
 
 	/**
 	 * Area for collisions
+	 * 
 	 * @return
 	 */
 	public Area getArea();

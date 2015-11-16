@@ -1,19 +1,27 @@
 package ee.itcollege.snake.lib;
 
 import java.awt.geom.Area;
-
+/**
+ * Checking the presence of collisions of {@link IDrawable} objects
+ * 
+ * @author Mikk Mangus
+ */
 public class CollisionDetector {
 
-	public static boolean collide(IDrawable a1, IDrawable a2) {
-		Area thisArea = a1.getArea();
+	/**
+	 * Check if there is a collision between two {@link IDrawable} bojects
+	 * @param o1
+	 * @param o2
+	 * @return true, if there is a collision
+	 */
+	public static boolean collide(IDrawable o1, IDrawable o2) {
+		Area thisArea = o1.getArea();
 		Area substracted = new Area(thisArea);
+
+		substracted.subtract(o2.getArea());
 		
-		substracted.subtract(a2.getArea());
-		if (!thisArea.equals(substracted)) {
-			return true;
-		}
-		
-		return false;
+		// if the substraction of areas changes the area, there is a collision
+		return !thisArea.equals(substracted);
 	}
-	
+
 }
