@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Timer;
@@ -12,6 +13,10 @@ import java.util.TimerTask;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import ee.itcollege.snake.elements.Snake;
 import ee.itcollege.snake.game.GameField;
@@ -25,6 +30,23 @@ public class SnakeGameStart implements Runnable {
 	
 	@Override
 	public void run() {
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Document document;
+				try {
+					document = Jsoup.connect("http://postimees.ee").get();
+					String title = document.select("h1.frontHeading").first().text();
+					window.setTitle(title);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}).start();
+
+		
+		
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setContentPane(game);
 		window.pack();
@@ -69,7 +91,7 @@ public class SnakeGameStart implements Runnable {
 			public void run() {
 				game.tick();
 			}
-		}, 100, 100);
+		}, 1500, 1500);
 	}
 	
 	public void saveGame() {
