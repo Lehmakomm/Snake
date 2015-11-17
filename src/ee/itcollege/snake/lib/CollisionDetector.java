@@ -15,10 +15,10 @@ public class CollisionDetector {
 	 * @return true, if there is a collision
 	 */
 	public static boolean collide(IDrawable o1, IDrawable o2) {
-		Area thisArea = o1.getArea();
+		Area thisArea = o1.getCollisionArea();
 		Area substracted = new Area(thisArea);
 
-		substracted.subtract(o2.getArea());
+		substracted.subtract(o2.getCollisionArea());
 		
 		// if the substraction of areas changes the area, there is a collision
 		return !thisArea.equals(substracted);

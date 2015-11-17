@@ -16,7 +16,7 @@ public interface IDrawable extends Serializable {
 	 * 
 	 * @return
 	 */
-	public Area getArea();
+	public Area getCollisionArea();
 
 	public void drawItself(Graphics2D g);
 
