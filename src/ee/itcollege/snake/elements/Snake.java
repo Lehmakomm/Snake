@@ -4,11 +4,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
+import ee.itcollege.snake.lib.CollisionDetector;
 import ee.itcollege.snake.lib.Direction;
 import ee.itcollege.snake.lib.IDrawable;
+import ee.itcollege.snake.lib.IEdible;
 
 public class Snake implements IDrawable {
 
@@ -34,6 +34,22 @@ public class Snake implements IDrawable {
 	@Override
 	public Area getCollisionArea() {
 		return getHead().getCollisionArea();
+	}
+	
+	public void eat(IEdible food) {
+		for (int i = 0; i < food.getCalories(); i++) {
+			parts.add(new SnakePart(-100, -100));
+		}
+	}
+	
+	public boolean collidesItself() {
+		SnakePart head = getHead();
+		for (int i = 4; i < parts.size(); i++) {
+			if (CollisionDetector.collide(head, parts.get(i))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void move() {
