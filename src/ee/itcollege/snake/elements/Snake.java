@@ -1,55 +1,61 @@
 package ee.itcollege.snake.elements;
 
+import java.awt.Graphics2D;
+import java.awt.geom.Area;
 import java.util.ArrayList;
 
 import ee.itcollege.snake.lib.Direction;
-import javafx.scene.Group;
+import ee.itcollege.snake.lib.IDrawable;
 
-public class Snake extends Group {
+public class Snake implements IDrawable {
+
+	ArrayList<SnakePart> parts = new ArrayList<SnakePart>();
 
 	private Direction direction = Direction.RIGHT;
-	private ArrayList<SnakePart> parts = new ArrayList<SnakePart>();
 
 	public Snake() {
 		for (int i = 0; i < 10; i++) {
-			SnakePart part = new SnakePart(100, 100 + i * SnakePart.SIZE);
-			addPart(part);
+			SnakePart part = new SnakePart(100, 100 + i * 10);
+			parts.add(part);
 		}
 	}
-	
-	private void addPart(SnakePart part) {
-		getChildren().add(part);
-		parts.add(part);
+
+	@Override
+	public void drawItself(Graphics2D g) {
+		for (SnakePart part : parts) {
+			part.drawItself(g);
+		}
 	}
 
-
+	@Override
+	public Area getArea() {
+		return getHead().getArea();
+	}
 
 	public void move() {
 		// move all the parts but the head
 		for (int i = parts.size() - 1; i >= 1; i--) {
-			SnakePart part = (SnakePart) parts.get(i);
-			SnakePart previousPart = (SnakePart) parts.get(i - 1);
-			part.setX(previousPart.getX());
-			part.setY(previousPart.getY());
+			SnakePart part = parts.get(i);
+			part.x = parts.get(i - 1).x;
+			part.y = parts.get(i - 1).y;
 		}
 
 		// move the head
 		SnakePart head = getHead();
 		switch (direction) {
 			case RIGHT:
-				head.setX(head.getX() + SnakePart.SIZE);
+				head.x += 10;
 				break;
 			case LEFT:
-				head.setX(head.getX() - SnakePart.SIZE);
+				head.x -= 10;
 				break;
 			case UP:
-				head.setY(head.getY() - SnakePart.SIZE);
+				head.y -= 10;
 				break;
 			case DOWN:
-				head.setY(head.getY() + SnakePart.SIZE);
+				head.y += 10;
 				break;
 		}
-		
 	}
 
 	public SnakePart getHead() {
@@ -65,17 +71,3 @@ public class Snake extends Group {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
