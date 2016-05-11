@@ -2,7 +2,9 @@ package ee.itcollege.snake.elements;
 
 import java.util.ArrayList;
 
+import ee.itcollege.snake.lib.CollisionDetector;
 import ee.itcollege.snake.lib.Direction;
+import javafx.application.Platform;
 import javafx.scene.Group;
 
 public class Snake extends Group {
@@ -21,8 +23,7 @@ public class Snake extends Group {
 		getChildren().add(part);
 		parts.add(part);
 	}
-
-
+	
 
 	public void move() {
 		// move all the parts but the head
@@ -51,6 +52,17 @@ public class Snake extends Group {
 		}
 		
 	}
+	
+	public boolean collidesItself() {
+		SnakePart head = getHead();
+		// check if head collides with any part starting from the fifth
+		for (int i = 4; i < parts.size(); i++) {
+			if (CollisionDetector.collide(head, parts.get(i))) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public SnakePart getHead() {
 		return parts.get(0);
@@ -61,7 +73,15 @@ public class Snake extends Group {
 	}
 
 	public void setDirection(Direction direction) {
-		this.direction = direction;
+		if (!this.direction.isOpposite(direction)) {
+			this.direction = direction;
+		}
+	}
+
+	public void eat(Edible food) {
+		for (int i = 0; i < food.getCalories(); i++) {
+			Platform.runLater(() -> addPart(new SnakePart(-1000, 0)));
+		}
 	}
 
 }
